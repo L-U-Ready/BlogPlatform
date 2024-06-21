@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap');
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.signup-box {
+    width: 700px; /* 로그인 박스의 너비 */
+    height: 500px;
+    /*border: 1px solid #ffffff; !* 테두리 *!*/
+    /*border-radius: 15px;*/
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); !* 그림자 효과 *!*/
+    background-color: #000000; /* 배경색 */
+    position: relative;
+    top: 60px; /* 헤더 아래에 위치하도록 설정 */
+}
+
+.signup-head {
+    text-align: center;
+    align-items: center;
+    border: 1px solid #000000;
+    border-radius: 15px 15px 0 0;
+    width: 100%;
+    height: 100px;
+    background-color: rgba(131, 222, 242, 1);
+}
+.signup-head p {
+    /* LogIN */
+    margin: 0;
+    height: 100px;
+    text-align: center;
+    font-family: "Holtwood One SC", serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 65px;
+    color: #000000;
+}
+
+.signup-body {
+    border: 1px solid #000000;
+    border-radius: 0 0 15px 15px;
+    border-top: none;
+    width: 100%;
+    height: 400px;
+    background-color: rgba(57, 234, 191, 1);
+    display: flex;
+}
+
+.left-box {
+    width: 30%;
+    height: 100%;
+    /*border: 1px solid #000000;*/
+    /*border-radius: 15px;*/
+    box-sizing: border-box;
+    padding-top: 20px;
+}
+
+.left-box .profile_image_label {
+    background-color: black;
+    border-radius: 15px;
+    width: 150px;
+    height: 30px;
+    margin: 10px 0 0 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+.left-box label {
+    color: #ffffff;
+    margin-left: 25px;
+    font-weight: bold;
+}
+.default-image {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 30px;
+}
+
+.default-image img {
+    width: 150px; /* 원하는 크기에 맞게 설정 */
+    height: 150px; /* 원하는 크기에 맞게 설정 */
+    border-radius: 50%; /* 원형으로 만들기 */
+    object-fit: cover; /* 이미지가 원형을 채우도록 설정 */
+    border: 2px solid #000000; /* 테두리 추가 (원하는 경우) */
+}
+
+.left-box img {
+    height: 60%;
+}
+
+.right-box {
+    width: 70%;
+    height: 100%;
+    /*border: 1px solid #000000;*/
+    /*border-radius: 15px;*/
+    box-sizing: border-box;
+    padding:10px 30px 0 30px;
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+ }
+.input-container {
+    margin-bottom: 20px;
+}
+.input-container input {
+    width: 90%;
+    height: 25px;
+    border: 2px solid black;
+    border-radius: 15px;
+    background-color: rgb(255, 253, 253);
+    padding-left: 10px;
+    font-size: 20px;
+    margin-top: 5px
+}
+.role-select {
+    /*padding: 15px 10px;*/
+}
+.role-select input[type=radio] {
+    display: none;
+}
+.role-select input[type=radio]+label{
+    display: inline-block;
+    cursor: pointer;
+    height: 24px;
+    width: 90px;
+    border: 1px solid #333;
+    border-radius: 15px;
+    line-height: 24px;
+    text-align: center;
+    font-weight:bold;
+    font-size:13px;
+}
+.role-select input[type=radio]+label{
+    background-color: #fff;
+    color: #333;
+}
+.role-select input[type=radio]:checked+label{
+    background-color: #333;
+    color: #fff;
+}
+
+.role-select button {
+    margin-left: 60px;
+    background-color: #83DEF2;
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    height: 30px;
+    width: 90px;
+    line-height: 24px;
+    text-align: center;
+    font-weight:bold;
+    font-size:13px;
+}

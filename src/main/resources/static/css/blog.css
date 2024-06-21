@@ -1,0 +1,22 @@
+
+
+/* Group 2 */
+.login-button {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 15px;
+    right: 50px; /* 오른쪽으로 이동 */
+}
+
+.login-button button{
+    /* Rectangle 1 */
+    background: #83DEF2;
+    border-radius: 25px;
+    width: 120px;
+    height: 50px;
+    cursor: pointer;
+}
+
+
+
