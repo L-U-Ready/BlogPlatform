@@ -1,34 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap');
+
 .header {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #333;
+    height: 80px;
+    background-color: rgba(34, 34, 34, 1);
     color: white;
-    text-align: center;
-    padding: 10px 0;
     z-index: 1000;
+    display: flex;
+    /*justify-content: center; !* 수평 가운데 정렬 *!*/
+    align-items: center;     /* 수직 가운데 정렬 */
     /*border: 1px solid white;*/
     /*border-radius: 15px;*/
 }
 
-.logo {
-    display: inline-block;
-    font-size: 24px;
-    font-weight: bold;
-    margin-left: 20px;
+.header .blog-name {
+    position: fixed;
+    margin-left: 5%;
+    font-family: "Holtwood One SC", serif;
+    font-size: 30px;
 }
-.nav {
-    float: right;
-    margin-right: 20px;
+
+.header .new-write {
+    position: fixed;
+    margin-left:80%;
+    border: 1px solid white;
+    border-radius: 15px;
+    height: 35px;
+    width: 100px;
+    text-align: center;
+    display: flex;          /* Flexbox 사용 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center;     /* 수직 가운데 정렬 */
+    cursor: pointer;         /* 커서 모양 변경 */
+
 }
-.nav button {
-    background-color: #444;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 5px;
-    cursor: pointer;
+
+.header .profile-image {
+    position: fixed;
+    margin-left: 90%;
+    width: 50px; /* 원하는 크기에 맞게 설정 */
+    height: 50px; /* 원하는 크기에 맞게 설정 */
+    border-radius: 50%; /* 원형으로 만들기 */
+    object-fit: cover; /* 이미지가 원형을 채우도록 설정 */
+    border: 2px solid #ffffff; /* 테두리 추가 (원하는 경우) */
 }
-.nav button:hover {
-    background-color: #555;
+
+.header .user-settings {
+    position: fixed;
+    margin-left: 95%;
+}
+
+.main {
+    margin-top: 80px;
 }

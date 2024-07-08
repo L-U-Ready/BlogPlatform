@@ -54,13 +54,13 @@ html, body {
     /*margin: 0 20px 15px 20px; !*상우하좌*!*/
     padding: 60px 0 25px 100px;
 }
-.email, .password {
+.username, .password {
     color: black;
     font-weight: bold;
     font-size: 25px;
 }
 
-.input-email, .input-password{
+.input-username, .input-password{
     border: 2px solid black;
     border-radius: 15px;
     background-color: rgb(255, 253, 253);
@@ -79,7 +79,7 @@ button {
     height: 40px;
     color: #000000;
     cursor: pointer;
-    margin-left: 252px;
+    margin-left: 110px;
     font-weight:bold;
     font-size:13px;
 }

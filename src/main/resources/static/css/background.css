@@ -13,5 +13,6 @@ body {
     background-size: cover; /* 이미지가 항상 전체를 덮도록 설정 */
     /*background-attachment: fixed; !* 스크롤 시 이미지가 움직이지 않도록 설정 *!*/
     color: white;
+    z-index: 0;
 }
 
