@@ -2,11 +2,14 @@ package org.example.blogplatform.config;
 import lombok.RequiredArgsConstructor;
 
 
+import org.example.blogplatform.security.CustomAuthenticationSuccessHandler;
 import org.example.blogplatform.security.CustomOAuth2AuthenticationSuccessHandler;
 import org.example.blogplatform.security.CustomUserDetailsService;
 import org.example.blogplatform.service.SocialUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -30,6 +33,7 @@ import java.util.List;
 public class SecurityConfig {
     private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
     private final SocialUserService socialUserService;
+    private final CustomAuthenticationSuccessHandler successHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
@@ -43,6 +47,12 @@ public class SecurityConfig {
                 )
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
+                .formLogin(form->form
+                    .loginPage("/Ylog/login")
+                        .successHandler(successHandler)  // 성공 핸들러 설정
+                    .failureUrl("/Ylog/login?error=true")
+                    .loginProcessingUrl("/Ylog/login") // 폼의 action과 일치해야 함
+                    .permitAll())
                 .cors(cors -> cors.configurationSource(configurationSource()))
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .oauth2Login(oauth2 -> oauth2
@@ -92,6 +102,14 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**",config);
         return source;
     }
+
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .inMemoryAuthentication()
+//                .withUser("user").password(passwordEncoder().encode("password")).roles("USER");
+//    }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

@@ -1,5 +1,6 @@
 package org.example.blogplatform.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.blogplatform.service.UserBlogService;
 import org.example.blogplatform.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/Ylog/{username}")
+@RequiredArgsConstructor
 public class UserBlogController {
-    @Autowired
     private UserBlogService userBlogService;
 
 
