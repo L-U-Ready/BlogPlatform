@@ -23,6 +23,9 @@ public class Post {
         POPULAR
     };
     @ManyToOne
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "blog_id")
     private Blog blog;
 

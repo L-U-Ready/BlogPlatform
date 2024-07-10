@@ -2,6 +2,8 @@ package org.example.blogplatform.config;
 import lombok.RequiredArgsConstructor;
 
 
+import org.example.blogplatform.jwt.filter.JwtAuthenticationFilter;
+import org.example.blogplatform.jwt.util.JwtTokenizer;
 import org.example.blogplatform.security.CustomAuthenticationSuccessHandler;
 import org.example.blogplatform.security.CustomOAuth2AuthenticationSuccessHandler;
 import org.example.blogplatform.security.CustomUserDetailsService;
@@ -34,8 +36,11 @@ public class SecurityConfig {
     private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
     private final SocialUserService socialUserService;
     private final CustomAuthenticationSuccessHandler successHandler;
+    private final JwtTokenizer jwtTokenizer;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenizer);
+
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/*", "/Ylog").permitAll()
@@ -62,7 +67,8 @@ public class SecurityConfig {
                                 .userService(this.oauth2UserService())
                         )
                         .successHandler(customOAuth2AuthenticationSuccessHandler)
-                );
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

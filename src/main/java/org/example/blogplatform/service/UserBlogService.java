@@ -22,4 +22,8 @@ public class UserBlogService {
         return userRepository.findById(id).orElse(null);
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }

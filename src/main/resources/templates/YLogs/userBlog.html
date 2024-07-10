@@ -7,30 +7,32 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/userBlog.css}">
 </head>
-<!--<body>-->
-<!--<div id="header"></div>-->
-<!--<header>-->
-<!--    <div class="header">-->
-<!--        <span class="blog-name" th:text="${loginUser.getName()} + '.Log'"></span>-->
-<!--        <button class="new-write" th:href="@{/${loginUser.getUserName()}/post}">new write</button>-->
-<!--        <img class="profile-image" th:src="${loginUser.getProfile_image()}" alt="Profile Image">-->
-<!--        <span class="user-settings">&#128772;</span>-->
-<!--    </div>-->
-<!--</header>-->
+<body>
+<div id="header"></div>
+<header>
+    <div class="header">
+        <span class="blog-name" th:text="${loginUser.getName()} + '.Log'"></span>
+        <a class="new-write" th:href="@{'/Ylog/' + ${loginUser.getUsername()} + '/post'}">
+            <button type="button">new write</button>
+        </a>
+        <img class="profile-image" th:src="${loginUser.getProfile_image()}" alt="Profile Image">
+        <span class="user-settings">&#128772;</span>
+    </div>
+</header>
 
-<!--<main>-->
-<!--    <div class="main">-->
-<!--        <div class="user-info">-->
-<!--            <span class="img-name">-->
-<!--                <img class="user-image" th:src="${loginUser.getProfile_image()}" alt="Profile Image">-->
-<!--                <span class="user-name" th:text="${loginUser.getUserName()}"></span>-->
-<!--            </span>-->
-<!--            <span class="follow-info">-->
-<!--                <span class="followers" th:test="${loginUser.getFollowers()} + ' followers'"></span>-->
-<!--                <span class="followings" th:test="${loginUser.getFollowings()} + ' followings'"></span>-->
-<!--            </span>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</main>-->
-<!--</body>-->
+<main>
+    <div class="main">
+        <div class="user-info">
+            <span class="img-name">
+                <img class="user-image" th:src="${loginUser.getProfile_image()}" alt="Profile Image">
+                <span class="user-name" th:text="${loginUser.getUsername()}"></span>
+            </span>
+            <span class="follow-info">
+                <span class="followers" th:test="${loginUser.getFollowers()} + ' followers'"></span>
+                <span class="followings" th:test="${loginUser.getFollowings()} + ' followings'"></span>
+            </span>
+        </div>
+    </div>
+</main>
+</body>
 </html>

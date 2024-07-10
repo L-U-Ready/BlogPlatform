@@ -8,11 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/Ylog/{username}")
 @RequiredArgsConstructor
 public class UserBlogController {
-    private UserBlogService userBlogService;
+    private final UserBlogService userBlogService;
 
 
 //    @GetMapping
@@ -26,7 +28,14 @@ public class UserBlogController {
 //    }
 
     @GetMapping
-    public String showUserBlog() {
+    public String showUserBlog(Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            User loginUser = userBlogService.findByUsername(username);
+            model.addAttribute("loginUser", loginUser);
+        }
+
+
         return "YLogs/userBlog";
     }
 }
