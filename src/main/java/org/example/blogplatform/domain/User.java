@@ -51,8 +51,8 @@ public class User {
     private Set<Role> roles;
 
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserBlog userBlog;
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private UserBlog userBlog;
 
     @Transient
     private MultipartFile profileImageFile;

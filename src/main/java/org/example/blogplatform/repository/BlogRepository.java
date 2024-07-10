@@ -1,3 +1,4 @@
+/*
 package org.example.blogplatform.repository;
 
 import org.example.blogplatform.domain.Blog;
@@ -7,3 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Long> {
 }
+*/

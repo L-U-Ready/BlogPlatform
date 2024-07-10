@@ -1,3 +1,4 @@
+/*
 package org.example.blogplatform.domain;
 
 import jakarta.persistence.*;
@@ -18,3 +19,4 @@ public class Blog {
     private List<Post> popularPostList;
 
 }
+*/

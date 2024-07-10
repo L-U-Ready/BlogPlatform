@@ -183,19 +183,15 @@ const editorConfig = {
     }
 };
 
-ClassicEditor.create(document.querySelector('#editor'), editorConfig)
-    .then(editor => {
-        document.querySelector('#post-form').addEventListener('submit', function (e) {
-            const content = editor.getData();
-            document.querySelector('#content').value = content;
-        });
+let editor;
 
-        // Apply custom styles after editor initialization
-        const editableElement = editor.ui.view.editable.element;
+ClassicEditor.create(document.querySelector('#editor'), editorConfig)
+    .then(editorInstance => {
+        window.editor = editorInstance;
+        const editableElement = editorInstance.ui.view.editable.element;
         editableElement.style.backgroundColor = 'black';
         editableElement.style.color = 'white';
 
-        // Apply focus styles to ensure they remain consistent
         editableElement.addEventListener('focus', () => {
             editableElement.style.backgroundColor = 'black';
             editableElement.style.color = 'white';
@@ -205,11 +201,19 @@ ClassicEditor.create(document.querySelector('#editor'), editorConfig)
             editableElement.style.color = 'white';
         });
 
-        // Additional custom styles for other elements
-        const toolbar = editor.ui.view.toolbar.element;
+        const toolbar = editorInstance.ui.view.toolbar.element;
         toolbar.style.backgroundColor = 'black';
         toolbar.querySelectorAll('.ck-button').forEach(button => {
             button.style.color = 'white';
+        });
+
+        document.querySelector('.btn-submit').addEventListener('click', function (e) {
+            const content = editorInstance.getData();
+            const ment = document.querySelector('#previewComment').value;
+            const title = document.querySelector('#postTitle').value;
+            document.querySelector('#content').value = content;
+            document.querySelector('#ment').value = ment;
+            document.querySelector('#title').value = title;
         });
 
         // CKEditor resizing

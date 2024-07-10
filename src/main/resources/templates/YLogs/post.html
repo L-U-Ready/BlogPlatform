@@ -4,23 +4,87 @@
     <meta charset="UTF-8">
     <title>UserBlog</title>
     <link rel="stylesheet" th:href="@{/css/background.css}">
-    <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/post.css}">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css">
+    <script>
+        function showPostCheckModal() {
+            document.getElementById('post-check-modal').style.display = 'block';
+        }
+
+        function hidePostCheckModal() {
+            document.getElementById('post-check-modal').style.display = 'none';
+        }
+
+        function previewThumbnail(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('thumbnailPreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function submitPostForm() {
+            // CKEditor 내용 설정
+            const content = editor.getData();
+            document.getElementById('content').value = content;
+            document.getElementById('post-form').submit();
+        }
+    </script>
 </head>
 <body>
 <div class="main-container">
-    <form id="post-form" th:action="@{|/Ylog/${username}/post|}" method="post" th:object="${username}">
+    <form id="post-form" th:action="@{|/Ylog/${username}/post|}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="content" id="content">
         <div class="editor-container editor-container_classic-editor" id="editor-container">
             <div class="editor-container__editor"><div id="editor"></div></div>
         </div>
         <div class="bottom-bar">
             <button type="button" class="btn-exit" onclick="location.href='/Ylog/${username}'">Exit</button>
-            <button type="submit" class="btn-submit">Submit</button>
+            <button type="button" class="btn-submit" onclick="showPostCheckModal()">Submit</button>
+        </div>
+
+        <!-- 포스트 체크 모달 -->
+        <div id="post-check-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hidePostCheckModal()">&times;</span>
+                <div class="left-side">
+                    <div class="title">
+                        <p>포스트 미리보기</p>
+                        <div class="thumbnail-image">
+                            <input type="file" id="thumbnailImageFile" name="image" accept="image/*" onchange="previewThumbnail(event)">
+                            <img id="thumbnailPreview" src="#" alt="Thumbnail Preview" style="display: none;"/>
+                        </div>
+                        <div class="preview-comment">
+                            <textarea id="previewComment" name="ment" maxlength="150" placeholder="포스트에 대한 소개글을 작성하세요 (150자 이내)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div class="title">
+                        <p>제목</p>
+                        <input type="text" id="postTitle" name="title" placeholder="제목을 입력하세요">
+                    </div>
+                    <div class="title">
+                        <p>공개 설정</p>
+                        <label><input type="radio" name="visibility" value="public" checked> 전체공개</label>
+                        <label><input type="radio" name="visibility" value="private"> 비공개</label>
+                    </div>
+                    <div class="title">
+                        <p>시리즈 설정</p>
+                        <button type="button">시리즈에 추가하기</button>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" onclick="hidePostCheckModal()">취소</button>
+                    <button type="submit" class="btn-submit" onclick="submitPostForm()">출간하기</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
+
 <script type="importmap">
     {
         "imports": {
