@@ -14,18 +14,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public void savePost(String username, String content, String ment, String title) {
+    public void savePost(String username, Post post) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new IllegalArgumentException("User not found");
         }
-
-        Post post = new Post();
-        post.setContent(content);
-        post.setMent(ment);
-        post.setTitle(title);
         post.setUser(user);
 
+        // username을 필요로 하는 추가 로직이 있다면 여기서 처리합니다.
         postRepository.save(post);
     }
 }

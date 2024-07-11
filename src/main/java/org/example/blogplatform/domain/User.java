@@ -35,7 +35,8 @@ public class User {
     @Column(name="registration_date", nullable = false, updatable = false)
     private LocalDateTime registrationDate = LocalDateTime.now();
 
-    private String profile_image;
+    @Column(name = "profile_image")
+    private String profileImage;
 
     //테이블에 추가한 컬럼들 엔티티에 추가
     @Column(name = "social_id")

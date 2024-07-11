@@ -34,6 +34,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -130,41 +131,27 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signUp(
-            @ModelAttribute User user,
-            @RequestParam("profileImageFile") MultipartFile file,
-            Model model) {
-        boolean check = true;
-        if (userService.checkUserInfoDuplication(user)){
-            model.addAttribute("emailCheckRes", "Email is Unique");
-        } else {
-            model.addAttribute("emailCheckRes", "Email is Duplicated");
-            check = false;
-        }
-        try {
-            if (!file.isEmpty()) {
-                String fileName = file.getOriginalFilename();
-                Path uploadPath = Paths.get(UPLOAD_DIR);
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                user.setProfile_image(filePath.toString());
-            } else {
-                user.setProfile_image(UPLOAD_DIR + "default.png");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            check = false;
-        } catch (Exception e) {
-            model.addAttribute("userRegMessage", "You Failed SignUp \n " + e);
-            check = false;
+            @ModelAttribute User user,BindingResult result,
+            Model model) throws IOException {
+        if(result.hasErrors()) {
+            model.addAttribute("errorMessage", "다시 입력해주세요.");
+            return "error";
         }
 
-        if(check){
-            model.addAttribute("userRegMessage", "Welcome " + user.getUsername());
-            userService.createUser(user, passwordEncoder);
+        MultipartFile profileImageFile = user.getProfileImageFile();
+        if (profileImageFile != null && !profileImageFile.isEmpty()) {
+            String filename = UUID.randomUUID().toString() + "_" + profileImageFile.getOriginalFilename();
+            Path imagePath = Paths.get("src/main/resources/static/images/profiles/" + filename);
+            Files.createDirectories(imagePath.getParent());
+            Files.write(imagePath, profileImageFile.getBytes());
+            user.setProfileImage(filename);
+        } else {
+            user.setProfileImage("default.png");
         }
+
+        model.addAttribute("userRegMessage", "Welcome " + user.getUsername());
+        userService.createUser(user, passwordEncoder);
+
         return "redirect:/Ylog";
     }
 

@@ -1,20 +1,27 @@
 package org.example.blogplatform.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.blogplatform.domain.Post;
 import org.example.blogplatform.service.UserBlogService;
 import org.example.blogplatform.domain.User;
+import org.example.blogplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/Ylog/{username}")
 @RequiredArgsConstructor
+@Slf4j
 public class UserBlogController {
     private final UserBlogService userBlogService;
+    private final UserService userService;
 
 
 //    @GetMapping
@@ -28,14 +35,16 @@ public class UserBlogController {
 //    }
 
     @GetMapping
-    public String showUserBlog(Model model, Principal principal) {
-        if (principal != null) {
-            String username = principal.getName();
-            User loginUser = userBlogService.findByUsername(username);
+    public String showUserBlog(@PathVariable String username, Model model, Principal principal) {
+        log.info("principal 유저 :::" + principal.getName());
+        log.info("사용자 이름 :::" + username);
+
+        if(username.equals(principal.getName())) {
+            User loginUser = userBlogService.findByUsername(principal.getName());
             model.addAttribute("loginUser", loginUser);
+            List<Post> posts = userBlogService.findPostsByUser(loginUser);
+            model.addAttribute("posts", posts);
         }
-
-
         return "YLogs/userBlog";
     }
 }

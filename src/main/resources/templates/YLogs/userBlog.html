@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>UserBlog</title>
-    <link rel="stylesheet" th:href="@{/css/background.css}">
+<!--    <link rel="stylesheet" th:href="@{/css/background.css}">-->
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/userBlog.css}">
 </head>
@@ -11,28 +11,56 @@
 <div id="header"></div>
 <header>
     <div class="header">
-        <span class="blog-name" th:text="${loginUser.getName()} + '.Log'"></span>
-        <a class="new-write" th:href="@{'/Ylog/' + ${loginUser.getUsername()} + '/post'}">
+        <span class="blog-name" th:text="${loginUser.name} + '.Log'"></span>
+        <a class="new-write" th:href="@{'/Ylog/' + ${loginUser.username} + '/post'}">
             <button type="button">new write</button>
         </a>
-        <img class="profile-image" th:src="${loginUser.getProfile_image()}" alt="Profile Image">
-        <span class="user-settings">&#128772;</span>
+        <img class="profile-image" th:src="@{'/images/profiles/' + ${loginUser.profileImage}}" alt="Profile Image">
+
+        <div class="user-settings">
+            &#128772;
+            <div class="dropdown-content">
+                <a th:href="@{'/Ylog/' + ${loginUser.username}}">내 블로그</a>
+                <a th:href="@{'/Ylog/' + ${loginUser.username} + '/drafts'}">임시 글</a>
+                <a th:href="@{'/Ylog/' + ${loginUser.username} + '/settings'}">설정</a>
+            </div>
+        </div>
     </div>
 </header>
 
 <main>
     <div class="main">
         <div class="user-info">
-            <span class="img-name">
-                <img class="user-image" th:src="${loginUser.getProfile_image()}" alt="Profile Image">
-                <span class="user-name" th:text="${loginUser.getUsername()}"></span>
-            </span>
-            <span class="follow-info">
-                <span class="followers" th:test="${loginUser.getFollowers()} + ' followers'"></span>
-                <span class="followings" th:test="${loginUser.getFollowings()} + ' followings'"></span>
-            </span>
+            <div class="img-name">
+                <img class="profile-image" th:src="@{'/images/profiles/' + ${loginUser.profileImage}}" alt="Profile Image">
+                <span class="user-name" th:text="${loginUser.username}"></span>
+            </div>
+            <hr class="divider">
+            <div class="follow-info">
+                <span class="followers" th:text="${loginUser.followers} + ' followers'"></span>
+                <span class="followings" th:text="${loginUser.followings} + ' followings'"></span>
+            </div>
+        </div>
+
+        <div class="show-posts">
+            <h2>Your Posts:</h2>
+            <div class="posts-box" id="posts-box">
+                <ul>
+                    <li th:each="post : ${posts}">
+                        <div class="post-each">
+                            <img class="post-thumbnail" th:src="@{'/images/posts/thumbnails/' + ${post.thumbnailImage}}" alt="Post Thumbnail">
+                            <h3 th:text="${post.title}">Post Title</h3>
+                            <p th:text="${post.ment}">Post Introduction</p>
+                            <p th:text="${post.content}">Post Content</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </main>
+
+<script th:src="@{/js/header.js}"></script> <!-- Add this line for header.js -->
+<script th:src="@{/js/infiniteScroll.js}"></script> <!-- Add this line for infinite scroll -->
 </body>
 </html>
