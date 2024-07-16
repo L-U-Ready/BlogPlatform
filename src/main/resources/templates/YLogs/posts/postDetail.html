@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>postDetails</title>
+        <link rel="stylesheet" th:href="@{/css/background.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/postDetail.css}">
+</head>
+<body>
+<div id="header"></div>
+<header>
+    <div class="header">
+        <span class="blog-name" th:text="${loginUser.name} + '.Log'"></span>
+        <a class="new-write" th:href="@{'/Ylog/' + ${loginUser.username} + '/post'}">
+            <button type="button">new write</button>
+        </a>
+        <img class="profile-image" th:src="@{'/images/profiles/' + ${loginUser.profileImage}}" alt="Profile Image">
+
+        <div class="user-settings">
+            &#128772;
+            <div class="dropdown-content">
+                <a th:href="@{'/Ylog/' + ${loginUser.username}}">내 블로그</a>
+                <a th:href="@{'/Ylog/' + ${loginUser.username} + '/drafts'}">임시 글</a>
+                <a th:href="@{'/Ylog/' + ${loginUser.username} + '/settings'}">설정</a>
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="main">
+        <img th:src="@{'/images/posts/thumbnails/' + ${post.thumbnailImage}}">
+        <p th:text="${post.title}"></p>
+        <p th:text="${post.content}"></p>
+
+        <form th:action="@{'/Ylog/' + ${loginUser.username}}" method="post">
+            <input type="text" name="title" th:value="${post.title}">
+            <input type="text" name="content" th:value="${post.content}">
+            <button type="submit">Update Post</button>
+        </form>
+    </div>
+</main>
+
+
+</body>
+</html>

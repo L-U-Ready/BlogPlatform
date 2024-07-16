@@ -48,10 +48,13 @@
                 <ul>
                     <li th:each="post : ${posts}">
                         <div class="post-each">
-                            <img class="post-thumbnail" th:src="@{'/images/posts/thumbnails/' + ${post.thumbnailImage}}" alt="Post Thumbnail">
-                            <h3 th:text="${post.title}">Post Title</h3>
-                            <p th:text="${post.ment}">Post Introduction</p>
+                            <a th:href="@{'/Ylog/' + ${loginUser.username} + '/post/' + ${post.encodedTitle}}">
+                                <img class="post-thumbnail" th:src="@{'/images/posts/thumbnails/' + ${post.thumbnailImage}}" alt="Post Thumbnail">
+                                <h3 th:text="${post.title}">Post Title</h3>
+                                <p th:text="${post.ment}">Post Ment</p>
+                            </a>
 <!--                            <p th:text="${post.content}">Post Content</p>-->
+                            <p th:text="${#temporals.format(post.releaseDate, 'yyyy년 MM월 dd일')}">Post ReleaseDate</p>
                         </div>
                     </li>
                 </ul>

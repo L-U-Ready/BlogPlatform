@@ -43,21 +43,28 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/*", "/Ylog").permitAll()
-                        .requestMatchers("/Ylog/loginform", "/Ylog/signupform").permitAll()
+                                .requestMatchers("/", "/*", "/Ylog").permitAll()
+                                .requestMatchers("/Ylog/loginform", "/Ylog/signupform").permitAll()
 //                        .requestMatchers("/userregform","/userreg","/loginform","/").permitAll()
-                        .requestMatchers("/oauth2/**", "/login/oauth2/code/github","/registerSocialUser","/saveSocialUser").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // 정적 자원 허용
-                        .anyRequest().authenticated()
+                                .requestMatchers("/oauth2/**", "/login/oauth2/code/github", "/registerSocialUser", "/saveSocialUser").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // 정적 자원 허용
+                                .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
-                .formLogin(form->form
-                    .loginPage("/Ylog/login")
+                .formLogin(form -> form
+                        .loginPage("/Ylog/loginform")
                         .successHandler(successHandler)  // 성공 핸들러 설정
-                    .failureUrl("/Ylog/login?error=true")
-                    .loginProcessingUrl("/Ylog/login") // 폼의 action과 일치해야 함
-                    .permitAll())
+                        .failureUrl("/Ylog/login?error=true")
+                        .loginProcessingUrl("/Ylog/login") // 폼의 action과 일치해야 함
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/Ylog")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JESSIONID", "accessToken", "refreshToken", "username")
+                        .permitAll()
+                )
                 .cors(cors -> cors.configurationSource(configurationSource()))
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .oauth2Login(oauth2 -> oauth2

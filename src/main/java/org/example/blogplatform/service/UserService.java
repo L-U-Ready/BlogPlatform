@@ -73,4 +73,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public void updateUser(User user, User updateUser) {
+        user.setName(updateUser.getName());
+        user.setEmail(updateUser.getEmail());
+        user.setUsername(updateUser.getUsername());
+
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
 }

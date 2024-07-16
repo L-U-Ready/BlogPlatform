@@ -16,11 +16,15 @@ public class Post {
     private Long id;
 
     private String title;
+    private String encodedTitle;
     private String tag;
     private String ment;
     private String content;
     @Enumerated(EnumType.STRING)
     private PostPopular postPopular;
+
+    @Enumerated(EnumType.STRING)
+    private PostStatus postStatus;
 
     private LocalDateTime releaseDate = LocalDateTime.now();
     private String thumbnailImage; // 파일명 저장 필드

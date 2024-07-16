@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+</head>
+<body>
+<button id="logout-button">Logout</button>
+<button id="withdrawal-button">withdrawal</button>
+
+<script>
+    document.getElementById('logout-button').addEventListener('click', async () => {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                credentials: 'include' // 쿠키를 포함하여 요청
+            });
+
+            if (response.ok) {
+                alert('Successfully logged out');
+                // 필요에 따라 페이지를 리디렉션하거나 다른 동작 수행
+                window.location.href = '/Ylog'; // 로그인 페이지로 리디렉션
+            } else {
+                alert('Failed to log out');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+            alert('An error occurred while logging out');
+        }
+    });
+    document.getElementById('withdrawal-button').addEventListener('click', async () => {
+        try {
+            const response = await fetch('/delete/{username}/settings/delete', {
+                method: 'DELETE',
+                credentials: 'include' // 쿠키를 포함하여 요청
+            });
+
+            if (response.ok) {
+                alert('Withdrawal success');
+                // 필요에 따라 ��이지를 리디��션하거나 다른 동작 수행
+                window.location.href = '/Ylog'; // 로그인 페이지로 리디렉션
+            } else {
+                alert('Failed to withdrawal');
+            }
+        } catch (error) {
+            console.error('Error withdrawal:', error);
+            alert('An error occurred while withdrawal');
+        }
+    });
+</script>
+</body>
+</html>

@@ -51,7 +51,7 @@ body{
 
 
 .show-posts {
-    width: 60%;
+    width: 70%;
     position: relative; /* 위치 조정을 위한 상대적 위치 설정 */
     top: 120px; /* 원하는 만큼 아래로 이동 */
     text-align: center;
