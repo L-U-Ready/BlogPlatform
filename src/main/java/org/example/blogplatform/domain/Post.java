@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -41,11 +42,12 @@ public class Post {
 //    @OneToMany(mappedBy = "post")
 //    private List<Image> images;
 //
-//    @OneToMany(mappedBy = "post")
-//    private List<Comment> comments;
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     @ManyToOne
     @JoinColumn(name = "userBlog_id")
     private UserBlog userBlog;
+
 
 }

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "comments")
 @Getter
@@ -21,6 +24,15 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    private String comment;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
 
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Comment> replies;
+
+
+    private String author;
+    private LocalDateTime creationDate = LocalDateTime.now();
+    private String content;
 }

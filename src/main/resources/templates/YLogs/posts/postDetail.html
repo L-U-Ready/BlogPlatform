@@ -2,8 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>postDetails</title>
-    <link rel="stylesheet" th:href="@{/css/background.css}">
+    <title>Post Details</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/postDetail.css}">
 </head>
@@ -29,16 +28,108 @@
     <div class="post-container">
         <h1 class="post-title" th:text="${post.title}">Post Title</h1>
         <div class="post-meta">
-            <span th:text="'By ' + ${post.author} +' | '">Author</span>
+            <span th:text="'By ' + ${post.author} + ' | '">Author</span>
             <span th:text="${#temporals.format(post.releaseDate, 'yyyy-MM-dd HH:mm')}">Release Date</span>
-            <a class="edit-button" th:href="@{'/Ylog/' + ${loginUser.username} + '/post/' + ${post.id} + '/' + ${post.encodedTitle} + '/edit'}">Edit</a>
-
+            <a class="edit-button"
+               th:href="@{'/Ylog/' + ${loginUser.username} + '/post/' + ${post.id} + '/' + ${post.encodedTitle} + '/edit'}">Edit</a>
         </div>
         <div class="post-content" th:utext="${post.content}">
             <!-- CKEditor content will be rendered here -->
         </div>
     </div>
+    <div class="user-info">
+        <div class="img-name">
+            <img class="profile-image" th:if="${post.user.profileImage != null}" th:src="@{'/images/profiles/' + ${post.user.profileImage}}" alt="Profile Image">
+            <span class="user-name" th:text="${post.user.username}"></span>
+        </div>
+        <hr class="divider">
+    </div>
+
+    <div class="comments">
+        <h2>댓글을 작성하세요</h2>
+        <form th:action="@{'/Ylog/' + ${username} + '/post/' + ${post.id} + '/' + ${post.encodedTitle} + '/comment'}" method="post">
+            <textarea name="content" placeholder="Write your comment here..."></textarea>
+            <button type="submit">댓글 작성</button>
+        </form>
+        <div class="comment-list" th:each="comment : ${comments}">
+            <div class="comment-item">
+                <div class="comment-meta">
+                    <img class="profile-image" th:if="${comment.user != null and comment.user.profileImage != null}" th:src="@{'/images/profiles/' + ${comment.user.profileImage}}" alt="Profile Image">
+                    <span class="comment-author" th:if="${comment.user != null}" th:text="${comment.user.username}"></span>
+                    <span th:text="${#temporals.format(comment.creationDate, 'yyyy-MM-dd HH:mm')}"></span>
+                </div>
+                <div class="comment-content" th:text="${comment.content}"></div>
+                <button type="button" th:onclick="'showReplyForm(' + ${comment.id} + ')'">답글 달기</button>
+                <button type="button" th:onclick="'deleteComment(' + ${comment.id} + ')'">삭제</button>
+                <div th:id="'reply-form-' + ${comment.id}" style="display:none;">
+                    <form th:action="@{'/Ylog/' + ${username} + '/post/' + ${post.id} + '/' + ${post.encodedTitle} + '/comment'}" method="post">
+                        <textarea name="content" placeholder="Write your reply here..."></textarea>
+                        <input type="hidden" name="parentId" th:value="${comment.id}">
+                        <button type="submit">Submit</button>
+                        <button type="button" th:onclick="'hideReplyForm(' + ${comment.id} + ')'">Cancel</button>
+                    </form>
+                </div>
+                <div class="replies" th:each="reply : ${comment.replies}">
+                    <div class="reply-item">
+                        <div class="comment-meta">
+                            <img class="profile-image" th:if="${reply.user != null and reply.user.profileImage != null}" th:src="@{'/images/profiles/' + ${reply.user.profileImage}}" alt="Profile Image">
+                            <span class="comment-author" th:if="${reply.user != null}" th:text="${reply.user.username}"></span>
+                            <span th:text="${#temporals.format(reply.creationDate, 'yyyy-MM-dd HH:mm')}"></span>
+                        </div>
+                        <div class="comment-content" th:text="${reply.content}"></div>
+                        <button type="button" th:onclick="'deleteReply(' + ${reply.id} + ')'">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
+
+<script>
+    function showReplyForm(commentId) {
+        document.getElementById('reply-form-' + commentId).style.display = 'block';
+    }
+
+    function hideReplyForm(commentId) {
+        document.getElementById('reply-form-' + commentId).style.display = 'none';
+    }
+
+    function deleteComment(commentId) {
+        if(confirm('댓글을 삭제하시겠습니까?')) {
+            fetch('/Ylog/comment/' + commentId + '/delete', {
+                method: 'DELETE',
+                credentials: 'include'
+            }).then(response => {
+                if(response.ok) {
+                    location.reload();
+                } else {
+                    alert('댓글 삭제에 실패했습니다.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('댓글 삭제 중 오류가 발생했습니다.');
+            });
+        }
+    }
+
+    function deleteReply(replyId) {
+        if(confirm('대댓글을 삭제하시겠습니까?')) {
+            fetch('/Ylog/reply/' + replyId + '/delete', {
+                method: 'DELETE',
+                credentials: 'include'
+            }).then(response => {
+                if(response.ok) {
+                    location.reload();
+                } else {
+                    alert('대댓글 삭제에 실패했습니다.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('대댓글 삭제 중 오류가 발생했습니다.');
+            });
+        }
+    }
+</script>
 <script th:src="@{/js/header.js}"></script>
 </body>
 </html>

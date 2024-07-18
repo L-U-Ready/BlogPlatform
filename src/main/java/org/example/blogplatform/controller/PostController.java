@@ -2,8 +2,10 @@ package org.example.blogplatform.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.blogplatform.domain.Comment;
 import org.example.blogplatform.domain.Post;
 import org.example.blogplatform.domain.User;
+import org.example.blogplatform.service.CommentService;
 import org.example.blogplatform.service.PostService;
 import org.example.blogplatform.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -26,13 +31,14 @@ import java.util.UUID;
 public class PostController {
     private final PostService postService;
     private final UserService userService;
+    private final CommentService commentService;
 
     private static final String UPLOAD_DIR = "src/main/resources/static/images/posts/thumbnails/";
     private static final int THUMBNAIL_WIDTH = 300; // 원하는 너비
     private static final int THUMBNAIL_HEIGHT = 300; // 원하는 높이
 
     @GetMapping
-    public String showUserBlog(@PathVariable String username, Model model) {
+    public String showPost(@PathVariable String username, Model model) {
         User user = userService.findByUsername(username);
 //        model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());  // 추가된 부분
@@ -59,13 +65,34 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/{encodedTitle}")
-    public String showPostDetail(@PathVariable String username, @PathVariable String encodedTitle, Model model, @PathVariable String postId){
+    public String showPostDetail(@PathVariable String username,  Model model, @PathVariable Long postId){
         User loginUser = userService.findByUsername(username);
-        Post post = postService.findById(Long.valueOf(postId));
+        Post post = postService.findById(postId);
+        List<Comment> allComments = commentService.findAllByPostIdOrderByCreationDate(postId);
+
         model.addAttribute("loginUser", loginUser);
         model.addAttribute("post", post);
+        model.addAttribute("comments", allComments);
+        model.addAttribute("username", username);
+
         return "YLogs/posts/postDetail";
     }
+
+    @PostMapping("/{postId}/{encodedTitle}/comment")
+    public String postComment(@PathVariable String username, @PathVariable Long postId, @PathVariable String encodedTitle, @ModelAttribute Comment comment, @RequestParam(required = false) Long parentId, Principal principal) {
+        Post post = postService.findById(postId);
+        if (parentId != null) {
+            Comment parentComment = commentService.findById(parentId);
+            comment.setParent(parentComment);
+        }
+        comment.setPost(post);
+        User commentUser = userService.findByUsername(principal.getName());
+        comment.setUser(commentUser);
+        comment.setAuthor(commentUser.getUsername());
+        commentService.saveComment(comment);
+        return "redirect:/Ylog/" + username + "/post/" + postId + "/" + encodedTitle;
+    }
+
     @GetMapping("/{postId}/{encodedTitle}/edit")
     public String showEditPostForm(@PathVariable String username, @PathVariable String encodedTitle, Model model, @PathVariable String postId) {
         Post post = postService.findById(Long.valueOf(postId));
@@ -86,4 +113,6 @@ public class PostController {
         log.info("Delete post id " + postId);
         postService.deletePostById(Long.valueOf(postId));
     }
+
+
 }

@@ -55,7 +55,8 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/Ylog/loginform")
                         .successHandler(successHandler)  // 성공 핸들러 설정
-                        .failureUrl("/Ylog/login?error=true")
+//                        .failureUrl("/Ylog/login?error=true")
+                        .failureUrl("/Ylog/loginform")
                         .loginProcessingUrl("/Ylog/login") // 폼의 action과 일치해야 함
                         .permitAll())
                 .logout(logout -> logout

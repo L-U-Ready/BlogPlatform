@@ -44,17 +44,17 @@ public class UserBlogController {
     public String showUserBlog(@PathVariable String username, Model model, Principal principal) throws UnsupportedEncodingException {
         log.info("principal 유저 :::" + principal.getName());
         log.info("사용자 이름 :::" + username);
-
-        if(username.equals(principal.getName())) {
-            User loginUser = userBlogService.findByUsername(principal.getName());
-            model.addAttribute("loginUser", loginUser);
-            List<Post> posts = postService.findAllByUserOrderByReleaseDateDesc(loginUser);
-            for(Post post : posts) {
-                if(post.getPostStatus() == PostStatus.PUBLISHED) {
-                    model.addAttribute("posts", posts);
-                }
+        User loginUser = userBlogService.findByUsername(principal.getName());
+        model.addAttribute("loginUser", loginUser);
+        List<Post> posts = postService.findAllByUserOrderByReleaseDateDesc(loginUser);
+        for(Post post : posts) {
+            if(post.getPostStatus() == PostStatus.PUBLISHED) {
+                model.addAttribute("posts", posts);
             }
         }
+
+        User blogUser = userBlogService.findByUsername(username);
+        model.addAttribute("blogUser", blogUser);
         return "YLogs/userBlog";
     }
 }
