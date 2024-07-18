@@ -25,10 +25,18 @@
             reader.readAsDataURL(event.target.files[0]);
         }
 
+        function archivePost() {
+            const content = editor.getData();
+            document.getElementById('postStatus').value = 'ARCHIVED';
+            document.getElementById('content').value = content;
+            document.getElementById('post-form').submit();
+        }
+
         function submitPostForm() {
             // CKEditor 내용 설정
             const content = editor.getData();
             document.getElementById('content').value = content;
+            document.getElementById('postStatus').value = 'PUBLISHED';
             document.getElementById('post-form').submit();
         }
     </script>
@@ -37,11 +45,13 @@
 <div class="main-container">
     <form id="post-form" th:action="@{|/Ylog/${username}/post|}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="content" id="content">
+        <input type="hidden" name="postStatus" id="postStatus">
         <div class="editor-container editor-container_classic-editor" id="editor-container">
             <div class="editor-container__editor"><div id="editor"></div></div>
         </div>
         <div class="bottom-bar">
-            <button type="button" class="btn-exit" onclick="location.href='/Ylog/${username}'">Exit</button>
+            <button type="button" class="btn-exit" th:onclick="|location.href='@{/Ylog/${username}}'|">Exit</button>
+
             <button type="button" class="btn-submit" onclick="showPostCheckModal()">Submit</button>
         </div>
 
@@ -64,7 +74,7 @@
                 <div class="right-side">
                     <div class="title">
                         <p>제목</p>
-                        <input type="text" id="postTitle" name="title" placeholder="제목을 입력하세요">
+                        <input type="text" id="postTitle" name="title" placeholder="제목을 입력하세요" required>
                     </div>
                     <div class="title">
                         <p>공개 설정</p>
@@ -78,7 +88,8 @@
                 </div>
                 <div class="modal-buttons">
                     <button type="button" onclick="hidePostCheckModal()">취소</button>
-                    <button type="submit" class="btn-submit" onclick="submitPostForm()">출간하기</button>
+                    <button type="button" onclick="archivePost()">임시저장</button>
+                    <button type="button" class="btn-submit" onclick="submitPostForm()">출간하기</button>
                 </div>
             </div>
         </div>

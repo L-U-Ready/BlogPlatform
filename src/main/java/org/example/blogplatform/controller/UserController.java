@@ -1,23 +1,13 @@
 package org.example.blogplatform.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.blogplatform.domain.RefreshToken;
-import org.example.blogplatform.domain.Role;
-import org.example.blogplatform.domain.SocialLoginInfo;
-import org.example.blogplatform.domain.User;
-import org.example.blogplatform.dto.UserLoginResponseDto;
-import org.example.blogplatform.jwt.util.CookieUtil;
+import org.example.blogplatform.domain.*;
 import org.example.blogplatform.jwt.util.JwtTokenizer;
 import org.example.blogplatform.security.dto.UserLoginDto;
+import org.example.blogplatform.service.PostService;
 import org.example.blogplatform.service.RefreshTokenService;
-import org.example.blogplatform.service.SocialLoginInfoService;
 import org.example.blogplatform.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,14 +19,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -47,6 +33,7 @@ public class UserController {
     private final JwtTokenizer jwtTokenizer;
     private final RefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final PostService postService;
 
 
 
@@ -97,7 +84,7 @@ public class UserController {
         return "YLogs/users/setting";
     }
 
-    @PutMapping("/{username}/settings")
+    @PutMapping("/{username}/settings/update")
     public String editUserInfo(@PathVariable String username, @ModelAttribute User updateUser, Principal principal) {
         if(username.equals(principal.getName())) {
             User user = userService.findByUsername(principal.getName());
@@ -106,11 +93,30 @@ public class UserController {
         return "YLogs/users/setting";
     }
 
-    @DeleteMapping("/{username}/delete")
-    public void deleteUser(@PathVariable String username){
+    @DeleteMapping("/{username}/settings/delete")
+    public String deleteUser(@PathVariable String username, @RequestParam("password") String password){
         User user = userService.findByUsername(username);
-        userService.deleteUser(user);
+        if(user.getPassword().equals(password)) {
+            userService.deleteUser(user);
+            log.info("User {} deleted", user.getUsername());
+        }
+        return "redirect:/logout";
     }
 
+    @GetMapping("/{username}/drafts")
+    public String showUserBlogDrafts(@PathVariable String username, Model model) {
+        User loginUser = userService.findByUsername(username);
+        model.addAttribute("loginUser", loginUser);
+        List<Post> allPosts = postService.findAllByUserOrderByReleaseDateDesc(loginUser);
+        List<Post> archivedPosts = new ArrayList<>();
+
+        for (Post post : allPosts) {
+            if ("ARCHIVED".equals(post.getPostStatus().toString())) {
+                archivedPosts.add(post);
+            }
+        }
+        model.addAttribute("posts", archivedPosts);
+        return "YLogs/draft";
+    }
 
 }

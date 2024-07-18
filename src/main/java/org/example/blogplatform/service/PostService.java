@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,14 +28,14 @@ public class PostService {
             throw new IllegalArgumentException("User not found");
         }
         post.setUser(user);
-        post.setEncodedTitle(URLEncoder.encode(post.getTitle(), StandardCharsets.UTF_8.name()));
+        post.setEncodedTitle(URLEncoder.encode(post.getTitle(), StandardCharsets.UTF_8));
+        post.setAuthor(user.getUsername());
         log.info("인코드 제목 : " + post.getEncodedTitle());
         // username을 필요로 하는 추가 로직이 있다면 여기서 처리합니다.
         postRepository.save(post);
     }
-
-    public Post findByTitle(String title) {
-        return postRepository.findByTitle(title);
+    public Post findById(Long id) {
+        return postRepository.findById(id).orElse(null);
     }
 
     public void updatePost(Post post, Post updatePost) {
@@ -44,12 +45,20 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void deletePost(Post post) {
-        postRepository.delete(post);
-    }
-
     public List<Post> findAllByOrderByReleaseDateDesc() {
         return postRepository.findAllByOrderByReleaseDateDesc();
+    }
+
+    public List<Post> findAllByUserOrderByReleaseDateDesc(User user) {
+        return postRepository.findAllByUserOrderByReleaseDateDesc(user);
+    }
+
+    public void deletePostById(Long id) {
+        postRepository.deleteById(id);
+    }
+
+    public void deletePostByTitle(String title) {
+        postRepository.deletePostByTitle(title);
     }
 
 }

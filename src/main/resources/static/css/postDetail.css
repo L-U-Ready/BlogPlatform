@@ -1,0 +1,46 @@
+html {
+    background-color: black;
+    color: white;
+}
+
+.post-container {
+    max-width: 800px;
+    margin: 200px auto;
+    padding: 20px;
+    /*border: 1px solid #ddd;*/
+    background-color: black;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    color: #777;
+    margin-top: 30px;
+}
+
+.post-content {
+    margin-top: 70px;
+    line-height: 1.6;
+}
+
+.edit-button {
+    display: inline-block;
+    /*margin-top: 20px;*/
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #007bff;
+    margin-left : 500px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+}

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.blogplatform.domain.Post;
 import org.example.blogplatform.domain.PostStatus;
+import org.example.blogplatform.service.PostService;
 import org.example.blogplatform.service.UserBlogService;
 import org.example.blogplatform.domain.User;
 import org.example.blogplatform.service.UserService;
@@ -26,6 +27,7 @@ import java.util.Objects;
 @Slf4j
 public class UserBlogController {
     private final UserBlogService userBlogService;
+    private final PostService postService;
 
 
 //    @GetMapping
@@ -46,7 +48,7 @@ public class UserBlogController {
         if(username.equals(principal.getName())) {
             User loginUser = userBlogService.findByUsername(principal.getName());
             model.addAttribute("loginUser", loginUser);
-            List<Post> posts = userBlogService.findPostsByUser(loginUser);
+            List<Post> posts = postService.findAllByUserOrderByReleaseDateDesc(loginUser);
             for(Post post : posts) {
                 if(post.getPostStatus() == PostStatus.PUBLISHED) {
                     model.addAttribute("posts", posts);

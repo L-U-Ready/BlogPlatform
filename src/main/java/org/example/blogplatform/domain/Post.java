@@ -20,6 +20,7 @@ public class Post {
     private String tag;
     private String ment;
     private String content;
+    private String author;
     @Enumerated(EnumType.STRING)
     private PostPopular postPopular;
 

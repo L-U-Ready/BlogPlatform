@@ -9,6 +9,7 @@
 <button id="withdrawal-button">withdrawal</button>
 
 <script>
+    const user = JSON.parse(localStorage.getItem('user'));
     document.getElementById('logout-button').addEventListener('click', async () => {
         try {
             const response = await fetch('/logout', {
@@ -30,14 +31,14 @@
     });
     document.getElementById('withdrawal-button').addEventListener('click', async () => {
         try {
-            const response = await fetch('/delete/{username}/settings/delete', {
+            const response = await fetch(`/Ylog/${user.username}/settings/delete`, {
                 method: 'DELETE',
                 credentials: 'include' // 쿠키를 포함하여 요청
             });
 
             if (response.ok) {
                 alert('Withdrawal success');
-                // 필요에 따라 ��이지를 리디��션하거나 다른 동작 수행
+                // 필요에 따라 페이지를 리디렉션하거나 다른 동작 수행
                 window.location.href = '/Ylog'; // 로그인 페이지로 리디렉션
             } else {
                 alert('Failed to withdrawal');

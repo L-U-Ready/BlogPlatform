@@ -58,34 +58,32 @@ public class PostController {
         return "redirect:/Ylog/" + username;
     }
 
-    @GetMapping("/{encodedTitle}")
-    public String showPostDetail(@PathVariable String username, @PathVariable String encodedTitle, Model model){
+    @GetMapping("/{postId}/{encodedTitle}")
+    public String showPostDetail(@PathVariable String username, @PathVariable String encodedTitle, Model model, @PathVariable String postId){
         User loginUser = userService.findByUsername(username);
-        Post post = postService.findByTitle(URLDecoder.decode(encodedTitle, StandardCharsets.UTF_8));
+        Post post = postService.findById(Long.valueOf(postId));
         model.addAttribute("loginUser", loginUser);
         model.addAttribute("post", post);
         return "YLogs/posts/postDetail";
     }
-    @GetMapping("/{encodedTitle}/edit")
-    public String editPost(@PathVariable String username, @PathVariable String encodedTitle, Model model){
-        User loginUser = userService.findByUsername(username);
-        Post post = postService.findByTitle(URLDecoder.decode(encodedTitle, StandardCharsets.UTF_8));
-        model.addAttribute("loginUser", loginUser);
+    @GetMapping("/{postId}/{encodedTitle}/edit")
+    public String showEditPostForm(@PathVariable String username, @PathVariable String encodedTitle, Model model, @PathVariable String postId) {
+        Post post = postService.findById(Long.valueOf(postId));
         model.addAttribute("post", post);
+        model.addAttribute("username", username);
         return "YLogs/posts/postEdit";
     }
 
-    @PutMapping("/{encodedTitle}/edit")
-    public String editPost(@PathVariable String username,@PathVariable String encodedTitle, @ModelAttribute Post updatePost) {
-        Post post = postService.findByTitle(URLDecoder.decode(encodedTitle, StandardCharsets.UTF_8));
+    @PostMapping("/{postId}/edit")
+    public String editPost(@PathVariable String username, @ModelAttribute Post updatePost, @PathVariable String postId) {
+        Post post = postService.findById(Long.valueOf(postId));
         postService.updatePost(post, updatePost);
         return "redirect:/Ylog/" + username;
     }
 
-    @DeleteMapping("/{encodedTitle}/delete")
-    public String deletePost(@PathVariable String username, @PathVariable String encodedTitle) {
-        Post post = postService.findByTitle(URLDecoder.decode(encodedTitle, StandardCharsets.UTF_8));
-        postService.deletePost(post);
-        return "redirect:/Ylog/" + username;
+    @DeleteMapping("/{postId}/delete")
+    public void deletePost(@PathVariable String postId) {
+        log.info("Delete post id " + postId);
+        postService.deletePostById(Long.valueOf(postId));
     }
 }

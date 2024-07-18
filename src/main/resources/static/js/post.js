@@ -183,6 +183,59 @@ const editorConfig = {
     }
 };
 
+// let editor;
+//
+// ClassicEditor.create(document.querySelector('#editor'), editorConfig)
+//     .then(editorInstance => {
+//         window.editor = editorInstance;
+//         const editableElement = editorInstance.ui.view.editable.element;
+//         editableElement.style.backgroundColor = 'black';
+//         editableElement.style.color = 'white';
+//
+//         editableElement.addEventListener('focus', () => {
+//             editableElement.style.backgroundColor = 'black';
+//             editableElement.style.color = 'white';
+//         });
+//         editableElement.addEventListener('blur', () => {
+//             editableElement.style.backgroundColor = 'black';
+//             editableElement.style.color = 'white';
+//         });
+//
+//         const toolbar = editorInstance.ui.view.toolbar.element;
+//         toolbar.style.backgroundColor = 'black';
+//         toolbar.querySelectorAll('.ck-button').forEach(button => {
+//             button.style.color = 'white';
+//         });
+//
+//         // 기존 내용 로드
+//         editorInstance.setData(document.querySelector('#content').value);
+//
+//         document.querySelector('.btn-submit').addEventListener('click', function (e) {
+//             const content = editorInstance.getData();
+//             const ment = document.querySelector('#previewComment').value;
+//             const title = document.querySelector('#postTitle').value;
+//             document.querySelector('#content').value = content;
+//             document.querySelector('#ment').value = ment;
+//             document.querySelector('#title').value = title;
+//         });
+//
+//         // CKEditor resizing
+//         const resizeEditor = () => {
+//             const editorContainer = document.querySelector('.editor-container__editor');
+//             const toolbarHeight = toolbar.offsetHeight;
+//             const windowHeight = window.innerHeight;
+//             editorContainer.style.height = `${windowHeight - toolbarHeight - 60}px`; // 하단 바 높이만큼 뺌
+//         };
+//
+//         // Initial resize
+//         resizeEditor();
+//
+//         // Resize on window resize
+//         window.addEventListener('resize', resizeEditor);
+//     })
+//     .catch(error => {
+//         console.error(error);
+//     });
 let editor;
 
 ClassicEditor.create(document.querySelector('#editor'), editorConfig)
@@ -206,6 +259,9 @@ ClassicEditor.create(document.querySelector('#editor'), editorConfig)
         toolbar.querySelectorAll('.ck-button').forEach(button => {
             button.style.color = 'white';
         });
+
+        // 기존 내용 로드
+        editorInstance.setData(document.querySelector('#content').value);
 
         document.querySelector('.btn-submit').addEventListener('click', function (e) {
             const content = editorInstance.getData();

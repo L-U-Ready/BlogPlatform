@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>postDetails</title>
+    <title>Drafts</title>
     <link rel="stylesheet" th:href="@{/css/background.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/postDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/draft.css}">
 </head>
 <body>
 <header>
@@ -15,6 +15,7 @@
             <button type="button">new write</button>
         </a>
         <img class="profile-image" th:src="@{'/images/profiles/' + ${loginUser.profileImage}}" alt="Profile Image">
+
         <div class="user-settings">
             &#128772;
             <div class="dropdown-content">
@@ -25,20 +26,22 @@
         </div>
     </div>
 </header>
-<main class="main">
-    <div class="post-container">
-        <h1 class="post-title" th:text="${post.title}">Post Title</h1>
-        <div class="post-meta">
-            <span th:text="'By ' + ${post.author} +' | '">Author</span>
-            <span th:text="${#temporals.format(post.releaseDate, 'yyyy-MM-dd HH:mm')}">Release Date</span>
-            <a class="edit-button" th:href="@{'/Ylog/' + ${loginUser.username} + '/post/' + ${post.id} + '/' + ${post.encodedTitle} + '/edit'}">Edit</a>
-
-        </div>
-        <div class="post-content" th:utext="${post.content}">
-            <!-- CKEditor content will be rendered here -->
-        </div>
+<main>
+    <div class="main">
+        <ul>
+            <li th:each="post : ${posts}" class="post" th:attr="id='post-' + ${post.id}">
+                <h3 th:text="${post.title}">Post Title</h3>
+                <p th:text="${#strings.abbreviate(post.content, 200)} + '...'">Post Content</p>
+                <p th:text="${#temporals.format(post.releaseDate, 'yyyy-MM-dd HH:mm')}">Post Release Date</p>
+                <button class="delete-button"
+                        onclick="deletePost([[${loginUser.username}]], [[${post.id}]])">
+                    Delete
+                </button>
+            </li>
+        </ul>
     </div>
 </main>
-<script th:src="@{/js/header.js}"></script>
+<script th:src="@{/js/draft.js}"></script>
+<script th:src="@{/js/header.js}"></script> <!-- Add this line for header.js -->
 </body>
 </html>
