@@ -3,8 +3,12 @@ package org.example.blogplatform.service;
 import lombok.RequiredArgsConstructor;
 import org.example.blogplatform.domain.Comment;
 import org.example.blogplatform.domain.Post;
+import org.example.blogplatform.domain.User;
 import org.example.blogplatform.repository.CommentRepository;
+import org.example.blogplatform.repository.PostRepository;
+import org.example.blogplatform.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,14 +16,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     public List<Comment> findAllByPostIdOrderByCreationDate(Long postId) {
         return commentRepository.findAllByPostIdOrderByCreationDate(postId);
     }
 
-    public void saveComment(Comment comment) {
-//        comment.setAuthor(username);
-//        comment.setPost(post);
+    @Transactional
+    public void saveComment(Long postId, Long parentId, Comment comment, String username) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+        User user = userRepository.findByUsername(username);
+
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setAuthor(user.getUsername());
+
+        if (parentId != null) {
+            Comment parentComment = commentRepository.findById(parentId).orElseThrow(() -> new IllegalArgumentException("Invalid parent comment ID"));
+            comment.setParent(parentComment);
+        }
+
         commentRepository.save(comment);
     }
 
@@ -38,4 +55,5 @@ public class CommentService {
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }
+
 }

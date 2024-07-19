@@ -6,18 +6,42 @@
     <link rel="stylesheet" th:href="@{/css/background.css}">
     <link rel="stylesheet" th:href="@{/css/blog.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
-
 </head>
 <body>
 <div id="header"></div>
 <header>
-    <div class="login-button">
+    <div class="login-button" th:if="${loginUser == null}">
         <button th:onclick="|location.href='@{/Ylog/loginform}'|">Login</button>
+    </div>
+    <div class="header" th:if="${loginUser != null}">
+        <span class="blog-name" th:text="${loginUser.name} + '.Log'"></span>
+        <a class="new-write" th:href="@{'/Ylog/' + ${loginUser.username} + '/post'}">
+            <button type="button">new write</button>
+        </a>
+        <img class="profile-image" th:src="@{'/images/profiles/' + ${loginUser.profileImage}}" alt="Profile Image">
+        <div class="user-settings">
+            &#128772;
+            <div class="dropdown-content">
+                <a th:href="@{'/Ylog/' + ${loginUser.username}}">내 블로그</a>
+                <a th:href="@{'/Ylog/' + ${loginUser.username} + '/drafts'}">임시 글</a>
+                <a th:href="@{'/Ylog/' + ${loginUser.username} + '/settings'}">설정</a>
+            </div>
+        </div>
     </div>
 </header>
 
 <main>
-
+    <div class="main">
+        <div class="sort-buttons">
+            <button id="sort-date">최신순</button>
+            <button id="sort-views">조회수 순</button>
+            <button id="sort-likes">좋아요 순</button>
+        </div>
+        <div id="posts-container"></div>
+        <script id="posts-data" type="application/json">
+            [[${postsJson}]]
+        </script>
+    </div>
 </main>
 
 <script th:src="@{/js/header.js}"></script>

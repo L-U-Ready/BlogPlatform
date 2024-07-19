@@ -49,5 +49,9 @@ public class Post {
     @JoinColumn(name = "userBlog_id")
     private UserBlog userBlog;
 
+    @OneToMany(mappedBy = "post")
+    private List<Like> likes;
 
+    // 새로운 필드 추가
+    private int views;
 }

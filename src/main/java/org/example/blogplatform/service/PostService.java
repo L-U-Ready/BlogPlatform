@@ -49,6 +49,15 @@ public class PostService {
         return postRepository.findAllByOrderByReleaseDateDesc();
     }
 
+    public List<Post> findAllByOrderByViewsDesc() {
+        return postRepository.findAllByOrderByViewsDesc();
+    }
+
+    public List<Post> findAllByOrderByLikesDesc() {
+        return postRepository.findAllByOrderByLikesDesc();
+    }
+
+
     public List<Post> findAllByUserOrderByReleaseDateDesc(User user) {
         return postRepository.findAllByUserOrderByReleaseDateDesc(user);
     }

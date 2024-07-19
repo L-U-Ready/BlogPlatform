@@ -78,20 +78,6 @@ public class PostController {
         return "YLogs/posts/postDetail";
     }
 
-    @PostMapping("/{postId}/{encodedTitle}/comment")
-    public String postComment(@PathVariable String username, @PathVariable Long postId, @PathVariable String encodedTitle, @ModelAttribute Comment comment, @RequestParam(required = false) Long parentId, Principal principal) {
-        Post post = postService.findById(postId);
-        if (parentId != null) {
-            Comment parentComment = commentService.findById(parentId);
-            comment.setParent(parentComment);
-        }
-        comment.setPost(post);
-        User commentUser = userService.findByUsername(principal.getName());
-        comment.setUser(commentUser);
-        comment.setAuthor(commentUser.getUsername());
-        commentService.saveComment(comment);
-        return "redirect:/Ylog/" + username + "/post/" + postId + "/" + encodedTitle;
-    }
 
     @GetMapping("/{postId}/{encodedTitle}/edit")
     public String showEditPostForm(@PathVariable String username, @PathVariable String encodedTitle, Model model, @PathVariable String postId) {
